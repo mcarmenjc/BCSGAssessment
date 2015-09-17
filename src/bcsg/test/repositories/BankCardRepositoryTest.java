@@ -3,14 +3,11 @@ package bcsg.test.repositories;
 import static org.junit.Assert.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import bcsg.entities.AmericanExpressCard;
 import bcsg.entities.BankCard;
 import bcsg.repositories.BankCardRepository;
 
