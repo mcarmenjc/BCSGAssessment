@@ -7,6 +7,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class BankCardRepository {
 		{
 			String line;
 			while ((line = bufferedReader.readLine()) != null) {
-				String[] cardData = line.split(";");
+				String[] cardData = line.split(",");
 				GregorianCalendar date = ParseCardExpiryDate(cardData);
 				cards.add(BankCardFactory.getBankCard(cardData[1], date, cardData[0]));
 			}
@@ -42,7 +44,17 @@ public class BankCardRepository {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		cards.sort((card1, card2) -> card1.getExpiryDate().compareTo(card2.getExpiryDate()));
+		Comparator<BankCard> byExpiryDate = new Comparator<BankCard>() {
+		    public int compare(BankCard card1, BankCard card2) {
+		        if (card1.getExpiryDate().before(card2.getExpiryDate())) {
+		            return 1;
+		        } else {
+		            return -1;
+		        } 
+		    }
+		};
+
+		Collections.sort(cards, byExpiryDate);
 		return cards;
 	}
 }
