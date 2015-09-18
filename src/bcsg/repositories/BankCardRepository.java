@@ -16,22 +16,10 @@ import bcsg.entities.BankCard;
 import bcsg.entities.BankCardFactory;
 
 public class BankCardRepository {
-	private String fileName;
+	private List<BankCard> cards;
 	
 	public BankCardRepository(String fileName){
-		this.fileName = fileName;
-	}
-
-	private GregorianCalendar ParseCardExpiryDate(String[] cardData) throws ParseException {
-		DateFormat dateFormat = new SimpleDateFormat("MMM-yyyy");
-		Date parsed = dateFormat.parse(cardData[2]);
-		GregorianCalendar date = new GregorianCalendar();
-		date.setTime(parsed);
-		return date;
-	}
-	
-	public List<BankCard> getAllCardsOrderedByExpiryDate(){
-		List<BankCard> cards = new ArrayList<BankCard>();
+		cards = new ArrayList<BankCard>();
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName)))
 		{
 			String line;
@@ -44,6 +32,17 @@ public class BankCardRepository {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private GregorianCalendar ParseCardExpiryDate(String[] cardData) throws ParseException {
+		DateFormat dateFormat = new SimpleDateFormat("MMM-yyyy");
+		Date parsed = dateFormat.parse(cardData[2]);
+		GregorianCalendar date = new GregorianCalendar();
+		date.setTime(parsed);
+		return date;
+	}
+	
+	public List<BankCard> getAllCardsOrderedByExpiryDate(){
 		Comparator<BankCard> byExpiryDate = new Comparator<BankCard>() {
 		    public int compare(BankCard card1, BankCard card2) {
 		        if (card1.getExpiryDate().before(card2.getExpiryDate())) {
